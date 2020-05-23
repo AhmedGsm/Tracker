@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Tracker</string>
+    <string name="locationFindingError">Error finding current position</string>
+    <string name="longLatValues">Latitude= %f Latitude= %f</string>
+
+
 </resources>
