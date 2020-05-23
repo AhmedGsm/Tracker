@@ -2,6 +2,8 @@
     <string name="app_name">Tracker</string>
     <string name="locationFindingError">Error finding current position</string>
     <string name="longLatValues">Latitude= %f Latitude= %f</string>
+    <string name="locationPermissionAlreadyRejected">Location already rejected, please delete data or reinstall the application</string>
+    <string name="permission_denied_message_str">Location permission denied</string>
 
 
 </resources>
