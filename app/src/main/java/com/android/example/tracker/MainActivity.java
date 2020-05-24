@@ -3,23 +3,29 @@ package com.android.example.tracker;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 public class MainActivity extends AppCompatActivity {
     private static final int LOCATION_REQUEST_PERMISSION_ID = 30;
-    private FusedLocationProviderClient mFusedLocationClient;
+    private boolean requestingLocationUpdates = true;
     private String TAG = MainActivity.class.getSimpleName();
 
     @Override
@@ -28,35 +34,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         // Check permission if has already granted
         if(!requestPermission())return;
-        getCurrentPosition();
+        startLocationWork();
     }
 
-    private void getCurrentPosition() {
-        // Create services client provider
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        // Get last current position
-        mFusedLocationClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
-            @Override
-            public void onSuccess(Location location) {
-                // If location is null stop program & display error toast message
-                if (location == null) {
-                    Toast.makeText(MainActivity.this, R.string.locationFindingError, Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                // Display current position in a Toast message
-                double latitude = location.getLatitude();
-                double longitude = location.getLongitude();
-                String longLatMsg = getString(R.string.longLatValues, latitude, longitude);
-                Toast.makeText(MainActivity.this, longLatMsg, Toast.LENGTH_SHORT).show();
-            }
-        })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(MainActivity.this, R.string.locationFindingError, Toast.LENGTH_SHORT).show();
-                        Log.e(TAG, "Error getting current position= " + e.getMessage());
-                    }
-                });
+    private void startLocationWork() {
+        // Start worker to get current location
+        OneTimeWorkRequest workRequest = new OneTimeWorkRequest.Builder(LocationWorker.class)
+                .build();
+        // Enqueue work
+        WorkManager.getInstance(this).enqueue(workRequest);
+        //getCurrentPosition();
     }
 
     private boolean requestPermission() {
@@ -75,7 +62,6 @@ public class MainActivity extends AppCompatActivity {
             return false;
         } else {
             // If the permission has already granted
-            //getCurrentPosition();
             return true;
         }
     }
@@ -86,7 +72,8 @@ public class MainActivity extends AppCompatActivity {
         switch (requestCode) {
             case LOCATION_REQUEST_PERMISSION_ID:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    getCurrentPosition();
+                    // Start current location finding on first grant dialog permission
+                    startLocationWork();
                 } else {
                     // permission denied by user
                     Toast.makeText(this,R.string.permission_denied_message_str,Toast.LENGTH_LONG).show();
