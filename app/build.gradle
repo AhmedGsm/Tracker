@@ -50,4 +50,10 @@ dependencies {
 
     // optional - Test helpers
     androidTestImplementation "androidx.work:work-testing:$work_version"
+    // One Signal library
+    implementation 'com.onesignal:OneSignal:3.13.2'
+    // multidex
+    implementation 'com.android.support:multidex:1.0.3'
+    implementation 'commons-codec:commons-codec:1.10'
+
 }

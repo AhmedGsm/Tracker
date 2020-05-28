@@ -1,6 +1,5 @@
 package com.android.example.tracker;
 
-
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -60,10 +59,10 @@ public class LocationWorker extends Worker {
         mLocationRequest = LocationRequest.create();
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         // Get Location every 5 seconds
-        mLocationRequest.setInterval(REQUESTING_INTERVAL_TIME);
-        mLocationRequest.setFastestInterval(MIN_REQUESTING_INTERVAL_TIME);
+        mLocationRequest.setInterval(Constants.REQUESTING_INTERVAL_TIME);
+        mLocationRequest.setFastestInterval(Constants.MIN_REQUESTING_INTERVAL_TIME);
         // Update current location only if user move at least 5 meters
-        mLocationRequest.setSmallestDisplacement(MIN_DISPLACEMENT_DISTANCE);
+        mLocationRequest.setSmallestDisplacement(Constants.MIN_DISPLACEMENT_DISTANCE);
         // Define location Callback
         mLocationCallback = new LocationCallback() {
             @Override
@@ -80,14 +79,22 @@ public class LocationWorker extends Worker {
                     return;
                 }
                 // Display current position in a Toast message
-                double latitude = location.getLatitude();
-                double longitude = location.getLongitude();
+                final double latitude = location.getLatitude();
+                final double longitude = location.getLongitude();
                 // Display current position in log
                 Log.i(TAG, "Current Latitude: " + latitude);
                 Log.i(TAG, "Current Longitude: " + longitude);
                 // Display current position in Toast message
                 String latLongMsg = mContext.getString(R.string.longLatValues, latitude, longitude);
                 Toast.makeText(mContext, latLongMsg, Toast.LENGTH_SHORT).show();
+                // Send background notification telling UID
+                Thread thread = new Thread() {
+                    @Override
+                    public void run() {
+                        TrackingUtils.sendNotification(mContext,latitude,longitude,Constants.RADIUS_AREA_CIRCLE);
+                    }
+                };
+                thread.start();
             }
         };
         // Request locations Update

@@ -3,7 +3,9 @@
     <string name="locationFindingError">Error finding current position</string>
     <string name="longLatValues">Latitude= %f Latitude= %f</string>
     <string name="locationPermissionAlreadyRejected">Location already rejected, please delete data or reinstall the application</string>
-    <string name="permission_denied_message_str">Location permission denied</string>
+    <string name="readDataPermissionAlreadyRejected">Read data already rejected, please delete data or reinstall the application</string>
+    <string name="permission_denied_message_str">Location permission is denied</string>
+    <string name="read_data_permission_denied_message_str">Read data permission is denied</string>
     <string name="cancelNotificationId">Tracker ID</string>
     <string name="trackerRunningBackground">Tracking current position…</string>
     <string name="trackerNotificationTitle">Tracker</string>
