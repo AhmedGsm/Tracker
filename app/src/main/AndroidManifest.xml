@@ -14,6 +14,11 @@
         android:name=".NotificationApplication"
         android:theme="@style/AppTheme">
 
+        <provider
+            android:name=".provider.ImprintContentProvider"
+            android:authorities="com.android.example.tracker"
+            android:exported="false" />
+
         <service
             android:name=".NotificationService"
             android:permission="android.permission.BIND_JOB_SERVICE"
