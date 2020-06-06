@@ -58,11 +58,8 @@ public class LocationWorker extends Worker {
         // Define location Request
         mLocationRequest = LocationRequest.create();
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        // Get Location every 5 seconds
+        // Get Location every Constants.REQUESTING_INTERVAL_TIME milliseconds
         mLocationRequest.setInterval(Constants.REQUESTING_INTERVAL_TIME);
-        mLocationRequest.setFastestInterval(Constants.MIN_REQUESTING_INTERVAL_TIME);
-        // Update current location only if user move at least 5 meters
-        mLocationRequest.setSmallestDisplacement(Constants.MIN_DISPLACEMENT_DISTANCE);
         // Define location Callback
         mLocationCallback = new LocationCallback() {
             @Override

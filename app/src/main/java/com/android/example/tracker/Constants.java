@@ -14,10 +14,4 @@ public class Constants {
     // Interval time to update current position & send hidden notifications
     static int REQUESTING_INTERVAL_TIME = 8000; // In milliseconds
 
-    // Min requesting time
-    static int MIN_REQUESTING_INTERVAL_TIME = 2000;
-
-    // Min requesting distance to update location & send notifications
-    static int MIN_DISPLACEMENT_DISTANCE = 5;
-
 }
